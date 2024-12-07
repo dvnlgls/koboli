@@ -14,9 +14,13 @@ export class AppComponent {
 
   title = 'koboli';
   addBookError = false;
-
+  books =[{id:'',name:'',author:'',description:'',whyread:'',date_created:''}];
 
   private bookBuilder = inject(FormBuilder);
+
+  ngOnInit() {
+    this.getBooks();
+  }
 
   bookForm = this.bookBuilder.group({
     bookName: ['', [Validators.required, Validators.pattern('(?!^ +$)^.+$'), Validators.maxLength(100)]],
@@ -26,11 +30,7 @@ export class AppComponent {
   });
 
   addBook() {
-    alert('add book');
     this.addBookError = false;
-
-    console.log('add book');
-    
 
     if (this.bookForm.valid) {
       // @ts-expect-error
@@ -38,18 +38,29 @@ export class AppComponent {
       // @ts-expect-error
       const authorName = this.bookForm.value.authorName.trim();
       // @ts-expect-error
-      this.databaseService.addBooks(bookName, authorName, this.bookForm.value.description, this.bookForm.value.whyRead).then((msg) => {
-        this.bookForm.reset();
-        console.log(msg);
-        console.log('db ok');
-        
-        alert('Book added successfully!');
-      }).catch(() => {
+      this.databaseService.addBooks(bookName, authorName, this.bookForm.value.description, this.bookForm.value.whyRead).then((result) => {
+        if(result.rowsAffected === 1) {
+          // success
+          this.bookForm.reset();
+        }
+      }).catch((err) => {
         this.addBookError = true;
       });
     } else {
       alert('Invalid form');
     }
+  }
+
+  getBooks() {
+    this.databaseService.getBooks().then((result) => {
+      console.log(result);
+      if(result.rows.length > 0) {
+        // @ts-expect-errorß
+        this.books = result.rows;
+      }
+      console.log(this.books);
+    });
+
   }
 
 }
