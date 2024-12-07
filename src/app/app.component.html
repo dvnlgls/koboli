@@ -30,31 +30,40 @@
       <div>Couldn't add the book. Please try again.</div>
     </div>
     <div>
-     name touched? {{bookForm.get('bookName')?.touched}}
+      name touched? {{bookForm.get('bookName')?.touched}}
     </div>
     <div>
       <button (click)="addBook()">Add Book</button>
     </div>
   </form>
-<ng-container *ngIf="books">
-  <table>
-    <thead>
-      <tr>
-        <th>Book</th>
-        <th>Author</th>
-        <th>Description</th>
-        <th>Why Read?</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let book of books">
-        <td>{{book.name}}</td>
-        <td>{{book.author}}</td>
-        <td>{{book.description}}</td>
-        <td>{{book.whyread}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-container *ngIf="books">
+    <table>
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Author</th>
+          <th>Description</th>
+          <th>Why Read?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books">
+          <td>{{book.name}}</td>
+          <td>{{book.author}}</td>
+          <td>{{book.description}}</td>
+          <td>{{book.whyread}}</td>
+          <td>
+            <mat-form-field>
+              <mat-label>Status</mat-label>
+              <mat-select>
+                <mat-option value="option1" (click)="setStatus(book.id, 'reading')">Reading</mat-option>
+                <mat-option value="option2" (click)=" setStatus(book.id, 'paused')">Paused</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-</ng-container>
+  </ng-container>
 </div>
