@@ -57,10 +57,9 @@ export class AppComponent {
     this.databaseService.getBooks().then((result) => {
       console.log(result);
       if(result.rows.length > 0) {
-        // @ts-expect-errorß
+        // @ts-expect-error
         this.books = result.rows;
       }
-      console.log(this.books);
     });
 
   }
