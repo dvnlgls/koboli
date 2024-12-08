@@ -17,6 +17,7 @@ export class AppComponent {
   title = 'koboli';
   addBookError = false;
   books =[{id:'',name:'',author:'',description:'',whyread:'',date_created:''}];
+  validBookStatus = ['reading', 'paused', 'finished', 'abandoned', 'toread'];
 
   private bookBuilder = inject(FormBuilder);
 
@@ -55,17 +56,18 @@ export class AppComponent {
 
   getBooks() {
     this.databaseService.getBooks().then((result) => {
-      console.log(result);
-      if(result.rows.length > 0) {
-        // @ts-expect-error
-        this.books = result.rows;
-      }
+      this.books = result;
     });
-
   }
 
   setStatus(id: string, status: string) {
-    console.log(id, status);
+    if(this.validBookStatus.includes(status)) {
+      this.databaseService.setStatus(id, status).then((result) => {
+        // result == 1, success
+        console.log(result);
+      });
+    }
+
   }
 
 }
